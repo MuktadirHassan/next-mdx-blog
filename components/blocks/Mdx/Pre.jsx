@@ -1,3 +1,8 @@
+import clsx from "clsx";
+import { useEffect, useRef, useState } from "react";
+import { CheckCircleIcon, ClipboardCopyIcon } from "@heroicons/react/solid";
+import Button from "@/components/atoms/Button";
+
 const Pre = ({ children, className }) => {
 	const [isCopied, setIsCopied] = useState(false);
 	const preRef = useRef(null);
@@ -61,7 +66,11 @@ const Pre = ({ children, className }) => {
 					)}
 				</Button>
 			</div>
-			<pre ref={preRef} style={{ paddingTop: "3.5rem" }} className={className}>
+			<pre
+				ref={preRef}
+				style={{ paddingTop: "3.5rem" }}
+				className={clsx(className, "overflow-x-auto overflow-y-hidden")}
+			>
 				{children}
 			</pre>
 		</div>
