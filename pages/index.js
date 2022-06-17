@@ -1,48 +1,21 @@
 import { getBlog } from "@/lib/fsReadHelpers";
-import { MDXRemote, MDXRemoteProps, MDXRemoteSerializeResult } from "next-mdx-remote";
-import { serialize } from "next-mdx-remote/serialize";
+import { Blogs } from "@/components/blocks/Blogs/Blogs";
 
 export const getStaticProps = async () => {
 	const blogs = getBlog();
-	const mdxPrism = require("mdx-prism");
-	const mdxSource = await serialize(blogs[0].content, {
-		mdxOptions: { rehypePlugins: [mdxPrism] },
-	});
+
 	return {
 		props: {
-			blogs: blogs.map((b) => ({ ...b.meta, slug: b.slug, content: b.content })),
-			mdxSource,
+			blogs: blogs.map((b) => ({ meta: b.meta, slug: b.slug, content: b.content })),
 		},
 	};
 };
 
-export default function Home({ blogs = [], mdxSource }) {
+export default function Home({ blogs = [] }) {
+	if (!blogs) return;
 	return (
-		<div className="max-w-prose leading-relaxed text-lg mx-auto">
-			<Blogs blogs={blogs} mdxSource={mdxSource} />
+		<div className="mx-auto text-lg leading-relaxed max-w-prose">
+			<Blogs blogs={blogs} />
 		</div>
-	);
-}
-
-function Blogs({ blogs, mdxSource }) {
-	return (
-		<>
-			{blogs.map((b) => (
-				<>
-					<Blog content={b.content} mdxSource={mdxSource} />
-				</>
-			))}
-		</>
-	);
-}
-
-function Blog({ content, mdxSource }) {
-	return (
-		<>
-			<p className="max-w-prose">
-				<MDXRemote {...mdxSource} components={{}} />
-			</p>
-			<hr className="my-10" />
-		</>
 	);
 }
