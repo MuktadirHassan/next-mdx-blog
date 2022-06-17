@@ -37,7 +37,7 @@ const Pre = ({ children, className }) => {
 						"bg-primary-4"
 					)}
 				>
-					{className?.replace("language-", "").toUpperCase()}
+					{className?.replace("hljs language-", "")}
 				</div>
 			</div>
 
@@ -68,7 +68,7 @@ const Pre = ({ children, className }) => {
 			</div>
 			<pre
 				ref={preRef}
-				style={{ paddingTop: "3.5rem" }}
+				style={{ paddingTop: "3rem" }}
 				className={clsx(className, "overflow-x-auto overflow-y-hidden")}
 			>
 				{children}

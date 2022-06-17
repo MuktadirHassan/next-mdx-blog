@@ -1,45 +1,10 @@
-import Highlight, { defaultProps } from "prism-react-renderer";
 import Blockquote from "./Blockquote";
-import InlineCode from "./InlineCode";
 import Pre from "./Pre";
-const exampleCode = `
-import React, { useState } from "react";
-
-function Example() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <div>
-      <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
-        Click me
-      </button>
-    </div>
-  );
-}
-`.trim();
 
 const MDXComponents = {
+	h3: (props) => <h3 className="my-3 text-4xl font-bold">{props.children}</h3>,
+	p: (props) => <p className="my-4 leading-relaxed max-w-prose">{props.children}</p>,
 	blockquote: Blockquote,
-	// code: InlineCode,
-	// pre: ({ chilren }) => {
-	// 	console.log("props => ", chilren);
-	// 	return (
-	// 		<Highlight {...defaultProps} code={exampleCode} language="jsx">
-	// 			{({ className, style, tokens, getLineProps, getTokenProps }) => (
-	// 				<pre className="p-4 my-6 rounded-lg" style={style}>
-	// 					{tokens.map((line, i) => (
-	// 						<div key={i} {...getLineProps({ line, key: i })}>
-	// 							{line.map((token, key) => (
-	// 								<span key={key} {...getTokenProps({ token, key })} />
-	// 							))}
-	// 						</div>
-	// 					))}
-	// 				</pre>
-	// 			)}
-	// 		</Highlight>
-	// 	);
-	// },
-	pre: Pre,
+	pre: (props) => <Pre className={props.children.props.className}>{props.children}</Pre>,
 };
 export default MDXComponents;

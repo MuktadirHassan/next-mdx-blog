@@ -4,7 +4,7 @@ import { getBlog, getBlogBySlug } from "@/lib/fsReadHelpers";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 
-import "prism-themes/themes/prism-night-owl.css";
+// import rehypeHighlight from "rehype-highlight";
 
 export default function SinglePost({ frontMatter, mdxSource }) {
 	const { title, author_name, published, last_modified, tags } = frontMatter;
@@ -16,7 +16,7 @@ export default function SinglePost({ frontMatter, mdxSource }) {
 			<p className="text-sm">Published: {published}</p>
 
 			<article>
-				<MDXRemote {...mdxSource} components={MDXComponents} />
+				<MDXRemote {...mdxSource} components={MDXComponents} lazy={true} />
 			</article>
 		</div>
 	);
@@ -33,15 +33,17 @@ export const getStaticPaths = () => {
 };
 
 export const getStaticProps = async (ctx) => {
-	const { slug } = ctx.params;
+	// Loading on server, as it is not needed on client
+	const rehypeHighlight = (await import("rehype-highlight")).default;
 
+	const { slug } = ctx.params;
 	const { content, data } = getBlogBySlug(slug);
-	const mdxPrism = require("mdx-prism");
+
 	const mdxSource = await serialize(content, {
 		// Optionally pass remark/rehype plugins
 		mdxOptions: {
 			remarkPlugins: [],
-			rehypePlugins: [mdxPrism],
+			rehypePlugins: [rehypeHighlight], // For syntax highlighting
 		},
 		scope: data,
 	});
