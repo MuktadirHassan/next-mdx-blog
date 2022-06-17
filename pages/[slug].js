@@ -3,6 +3,9 @@ import MDXComponents from "@/components/blocks/Mdx/MdxComponents";
 import { getBlog, getBlogBySlug } from "@/lib/fsReadHelpers";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
+
+import "prism-themes/themes/prism-night-owl.css";
+
 export default function SinglePost({ frontMatter, mdxSource }) {
 	const { title, author_name, published, last_modified, tags } = frontMatter;
 	if (!frontMatter || !mdxSource) return null;
@@ -33,12 +36,12 @@ export const getStaticProps = async (ctx) => {
 	const { slug } = ctx.params;
 
 	const { content, data } = getBlogBySlug(slug);
-
+	const mdxPrism = require("mdx-prism");
 	const mdxSource = await serialize(content, {
 		// Optionally pass remark/rehype plugins
 		mdxOptions: {
 			remarkPlugins: [],
-			rehypePlugins: [],
+			rehypePlugins: [mdxPrism],
 		},
 		scope: data,
 	});
